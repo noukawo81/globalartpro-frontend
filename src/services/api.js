@@ -1,9 +1,13 @@
-// frontend/src/services/api.js
 import axios from "axios";
 
+const BASE =
+  import.meta.env.VITE_API_URL ||
+  "https://globalartpro-backend-production.up.railway.app/api/gapstudio";
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/gapstudio",
-  timeout: 120000,
+  baseURL: BASE,
+  headers: { "Content-Type": "application/json" },
+  timeout: 60000,
 });
 
 export default API;
