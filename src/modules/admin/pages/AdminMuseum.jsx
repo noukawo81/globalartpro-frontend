@@ -15,6 +15,9 @@ export default function AdminMuseum() {
   const [patch, setPatch] = useState({});
   const [toast, setToast] = useState({ open: false, message: '', type: 'info' });
 
+   
+   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchItems();
   }, [page, pageSize, statusFilter, categoryFilter, tagFilter]);
@@ -33,7 +36,8 @@ export default function AdminMuseum() {
       const res = await api.adminGetMuseum(params);
       setItems(res.items || []);
       setTotal(res.total || 0);
-    } catch (e) {
+    } catch (err) {
+      console.error(err);
       alert('Erreur chargement');
     } finally { setLoading(false); }
   };
@@ -46,7 +50,7 @@ export default function AdminMuseum() {
       const res = await api.adminGetMuseum(params);
       setItems(res.items || []);
       setTotal(res.total || 0);
-    } catch (e) { setToast({ open: true, message: 'Erreur', type: 'error' }); } finally { setLoading(false); }
+    } catch (err) { console.error(err); setToast({ open: true, message: 'Erreur', type: 'error' }); } finally { setLoading(false); }
   };
 
   const startEdit = (it) => { setEditing(it); setPatch({ title: it.title, category: it.category, price: it.price, access: it.access, tags: (it.tags||[]).join(',') }); };
@@ -56,21 +60,21 @@ export default function AdminMuseum() {
       setEditing(null);
       fetchItems();
       setToast({ open: true, message: 'Sauvegardé', type: 'success' });
-    } catch (e) { setToast({ open: true, message: 'Erreur sauvegarde', type: 'error' }); }
+    } catch (err) { console.error(err); setToast({ open: true, message: 'Erreur sauvegarde', type: 'error' }); }
   };
 
   const toggleVisibility = async (id) => {
-    try { await api.adminToggleVisibility(id); fetchItems(); setToast({ open: true, message: 'Visibilité modifiée', type: 'success' }); } catch (e) { setToast({ open: true, message: 'Erreur', type: 'error' }); }
+    try { await api.adminToggleVisibility(id); fetchItems(); setToast({ open: true, message: 'Visibilité modifiée', type: 'success' }); } catch (err) { console.error(err); setToast({ open: true, message: 'Erreur', type: 'error' }); }
   };
 
   const archiveItem = async (id) => {
     if (!confirm('Archiver cette œuvre ?')) return;
-    try { await api.adminArchiveItem(id); fetchItems(); setToast({ open: true, message: 'Œuvre archivée', type: 'success' }); } catch (e) { setToast({ open: true, message: 'Erreur', type: 'error' }); }
+    try { await api.adminArchiveItem(id); fetchItems(); setToast({ open: true, message: 'Œuvre archivée', type: 'success' }); } catch (err) { console.error(err); setToast({ open: true, message: 'Erreur', type: 'error' }); }
   };
 
   const deleteItem = async (id) => {
     if (!confirm('Supprimer définitivement ?')) return;
-    try { await api.adminDeleteItem(id); fetchItems(); setToast({ open: true, message: 'Œuvre supprimée', type: 'success' }); } catch (e) { setToast({ open: true, message: 'Erreur', type: 'error' }); }
+    try { await api.adminDeleteItem(id); fetchItems(); setToast({ open: true, message: 'Œuvre supprimée', type: 'success' }); } catch (err) { console.error(err); setToast({ open: true, message: 'Erreur', type: 'error' }); }
   };
 
   if (loading) return <div style={{ padding: 20 }}>Chargement...</div>;
