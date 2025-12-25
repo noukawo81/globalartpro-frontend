@@ -12,7 +12,7 @@ export default function ArtistProfile() {
   const isCurrentArtist = String(artistId) === String(id);
 
   // Simulation API – tu remplaceras plus tard par ton API réelle
-  async function fetchArtistData() {
+  const fetchArtistData = React.useCallback(async () => {
     setLoading(true);
 
     // 1) FIRST: Try to fetch from backend API (source of truth)
@@ -64,7 +64,7 @@ export default function ArtistProfile() {
     };
     setArtist(mockData);
     setLoading(false);
-  }
+  }, [id, authUser]);
 
   useEffect(() => {
     // Guard against invalid id values caused by bad navigation or races
@@ -73,7 +73,7 @@ export default function ArtistProfile() {
       return;
     }
     fetchArtistData();
-  }, [id]);
+  }, [id, navigate, fetchArtistData]);
 
   // Edit modal state
   const [showEdit, setShowEdit] = useState(false);
@@ -395,7 +395,7 @@ async function shareMediaToMarketplace(mediaId, title = 'Œuvre', price = 0) {
           {isCurrentArtist && (
             <div style={{ marginTop: 12 }}>
               <h4>Ajouter un média (image, vidéo courte, audio)</h4>
-              <form onSubmit={(e) => { e.preventDefault(); const f = e.target.file.files[0]; const title = e.target.title.value || f?.name; const kind = e.target.kind.value; if (f) handleUploadFile(f, title, kind); e.target.reset(); }}>
+              <form onSubmit={(e) => { e.preventDefault(); const f = e.target.file.files[0]; const title = e.target.title.value || f?.name; const kind = e.target.kind.value; if (f) { if (api.getToken && api.getToken()) { handleMediaUpload(f); } else { handleUploadFile(f, title, kind); } } e.target.reset(); }}>
                 <input name="title" placeholder="Titre (optionnel)" style={{ marginRight: 8 }} />
                 <select name="kind" defaultValue="image" style={{ marginRight: 8 }}>
                   <option value="image">Image</option>
