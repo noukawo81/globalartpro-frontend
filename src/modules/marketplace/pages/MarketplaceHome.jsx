@@ -169,7 +169,7 @@ export default function MarketplaceHome() {
         const data = listings.filter(l => (activeTab === 'museum' ? l.pole === 'museum' : (activeTab === 'physical' ? l.pole === 'physical' || l.pole === 'physical' : (activeTab === 'digital' ? l.pole === 'digital' : (activeTab === 'nft' ? l.pole === 'nft' : true)))))
                          .map(l => ({ id: l.id, title: l.title, artist: l.artistName || l.artistId || l.artist || 'Artiste inconnu', price: l.price, currency: l.baseCurrency || 'USD', displayPrices: l.displayPrices, raw: l }));
         if (mounted) setProducts(data.length ? data : (MOCK_DATA[activeTab] || []));
-      } catch (/* ignored */) {
+      } catch {
         // Fallback to mock data
         setProducts(MOCK_DATA[activeTab] || []);
       }
@@ -442,7 +442,7 @@ export default function MarketplaceHome() {
                 try {
                   await handleBuy(selectedProduct, 'PI');
                   setShowPIModal(false);
-                } catch (/* err */) {
+                } catch {
                   alert('Erreur lors du paiement PI');
                 }
               }}>J'ai payé — Confirmer</button>
