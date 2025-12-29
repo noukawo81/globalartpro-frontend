@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from '@/services/api.js';
+import ChatModal from '@/components/ChatModal.jsx';
 import { useAuth } from "@/core/hooks/useAuth.js";
 
 export default function ArtistList() {
   const [tab, setTab] = useState("signup");
   const navigate = useNavigate();
   const { login, setArtistId, artistId } = useAuth();
+  const [openChat, setOpenChat] = React.useState(false);
 
   // Signup controlled form
   const [signup, setSignup] = useState({
@@ -124,6 +126,10 @@ export default function ArtistList() {
       <div style={styles.container}>
 
         <h2 style={styles.title}>Espace Artiste – GlobalArtPro</h2>
+
+        <div style={{ marginBottom: 12 }}>
+          <button onClick={() => setOpenChat(true)} style={{ padding: '8px 12px', borderRadius: 8, background: '#0b5cff', color: '#fff', border: 'none' }}>Contacter un artiste</button>
+        </div>
 
         {/* Onglets */}
         <div style={styles.tabs}>
@@ -281,6 +287,11 @@ export default function ArtistList() {
           </form>
         )}
 
+        <div style={{ marginTop: 18 }}>
+          <small style={{ color: '#aaa' }}>Tip: vous pouvez entrer un `dev-user-...` en mode démo pour commencer une conversation.</small>
+        </div>
+
+        {openChat && <ChatModal open={openChat} onClose={() => setOpenChat(false)} />}
       </div>
     </div>
   );
