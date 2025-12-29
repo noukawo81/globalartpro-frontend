@@ -8,10 +8,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite preview --port 3000",
-    "lint": "eslint . --ext .js,.jsx"
+    "lint": "eslint . --ext .js,.jsx",
+    "test:e2e": "node scripts/e2e-pass-ui.test.js",
+    "test:e2e-museum": "node scripts/e2e-museum-globe.test.js"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.13.2",
+    "framer-motion": "^12.23.26",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.6"
@@ -25,6 +28,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "globals": "^15.0.0",
+    "puppeteer": "^24.33.0",
     "vite": "^5.2.0"
   },
   "engines": {

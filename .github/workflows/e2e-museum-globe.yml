@@ -1,0 +1,41 @@
+name: E2E Museum Globe (Puppeteer + Axe)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  e2e:
+    name: E2E (museum globe)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start frontend dev server
+        run: |
+          npm run dev -- --port 5176 > /tmp/vite.log 2>&1 & echo $! > /tmp/vite.pid
+
+      - name: Wait for dev server
+        run: npx wait-on http://localhost:5176
+
+      - name: Run e2e Museum Globe
+        env:
+          BASE_URL: http://localhost:5176
+        run: npm run test:e2e-museum
+
+      - name: Upload e2e artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-museum-globe-artifacts
+          path: artifacts/**
