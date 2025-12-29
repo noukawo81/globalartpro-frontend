@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite preview --port 3000",
-    "lint": "eslint . --ext .js,.jsx"
+    "lint": "eslint . --ext .js,.jsx",
+    "test:e2e": "node scripts/e2e-pass-ui.test.js",
+    "test:e2e-museum": "node scripts/e2e-museum-globe.test.js"
   },
   "dependencies": {
     "axios": "^1.13.2",

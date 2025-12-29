@@ -71,6 +71,14 @@ export const api = {
   getARTCBalance: (userId) => 
     API.get("/artc/balance", { params: { userId } }).then((r) => r.data),
 
+  // ---- Wallet / Multi-currency balance ----
+  getWalletBalance: (userId) =>
+    API.get('/wallet/balance', { params: { userId } }).then((r) => r.data),
+
+  // ---- Passes ----
+  getPasses: (userId) => API.get('/wallet/passes', { params: { userId } }).then(r => r.data),
+  buyPass: (userId, passType, period = 'monthly', currency = 'USD') => API.post('/wallet/buy-pass', { userId, passType, period, currency }).then(r => r.data),
+
   mineARTC: (userId) => 
     API.post("/artc/mine", { userId }).then((r) => r.data),
 
@@ -94,13 +102,18 @@ export const api = {
   createDonation: (amount, currency = "pi") =>
     API.post("/donations/create", { amount, currency }).then((r) => r.data),
 
+  // ---- Recharge ARTC (dev helper) ----
+  rechargeARTC: (userId, amount) =>
+    API.post('/wallet/recharge', { userId, amount }).then(r => r.data),
+
   // ---- Marketplace ----
   buyArtwork: (artworkId, paymentMethod) =>
     API.post("/marketplace/buy", { artworkId, paymentMethod }).then((r) => r.data),
   marketplaceBuy: (buyerId, sellerId, productId, amount, token = 'ARTC') =>
-    API.post('/marketplace/buy', { userId: buyerId, sellerId, productId, amount, token }).then(r => r.data),
+    API.post('/marketplace/buy', { userId: buyerId, sellerId, productId, amount, token }).then(r => ({ status: r.status, data: r.data })),
+
   // Listings
-  getMarketplaceListings: () => API.get('/marketplace/list').then(r => r.data),
+  getMarketplaceListings: (display = false) => API.get('/marketplace/list', { params: display ? { display: true } : {} }).then(r => r.data),
   exhibitListing: (listingId) => API.post(`/marketplace/${listingId}/exhibit`).then(r => r.data),
 
   // ---- Portal Culture ----
@@ -125,6 +138,10 @@ export const api = {
   // ---- Museum (Galerie) ----
   getMuseum: (params = {}) =>
     API.get('/museum', { params }).then((r) => r.data),
+
+  // ---- Museum Globe (Concentric world view) ----
+  getMuseumGlobe: (params = {}) =>
+    API.get('/museum/globe', { params }).then((r) => r.data),
 
   getMuseumItem: (id) =>
     API.get(`/museum/${id}`).then((r) => r.data),
